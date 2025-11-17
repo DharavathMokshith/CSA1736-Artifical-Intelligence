@@ -1,0 +1,19 @@
+board = [0] * 8
+def safe(r, c):
+    for i in range(c):
+        if board[i] == r or abs(board[i] - r) == abs(i - c):
+            return False
+    return True
+
+def solve(c=0):
+    if c == 8:
+        print(board)
+        return True
+    for r in range(8):
+        if safe(r, c):
+            board[c] = r
+            if solve(c + 1):
+                return True
+    return False
+
+solve()
