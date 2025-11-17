@@ -1,0 +1,47 @@
+from collections import deque
+def safe(m, c):
+    return (m == 0 or m >= c)
+def valid(state):
+    M1, C1, boat, M2, C2 = state
+    return safe(M1, C1) and safe(M2, C2)
+def get_moves(state):
+    M1, C1, boat, M2, C2 = state
+    moves = []
+    options = [(1,0),(2,0),(0,1),(0,2),(1,1)]
+
+    for m, c in options:
+        if boat == 1:
+            if M1 >= m and C1 >= c:
+                new = (M1-m, C1-c, 0, M2+m, C2+c)
+                if valid(new):
+                    moves.append(new)
+        else:   
+            if M2 >= m and C2 >= c:
+                new = (M1+m, C1+c, 1, M2-m, C2-c)
+                if valid(new):
+                    moves.append(new)
+
+    return moves
+
+def solve():
+    start = (3,3,1,0,0)   
+    goal  = (0,0,0,3,3)
+
+    q = deque([(start, [])])
+    visited = set([start])
+
+    while q:
+        state, path = q.popleft()
+
+        if state == goal:
+            return path + [state]
+
+        for nxt in get_moves(state):
+            if nxt not in visited:
+                visited.add(nxt)
+                q.append((nxt, path+[state]))
+
+solution = solve()
+
+for s in solution:
+    print(s)
