@@ -1,0 +1,40 @@
+from collections import deque
+goal = "123456780"
+def get_moves(state):
+    moves = []
+    i = state.index("0")
+    x, y = divmod(i, 3)
+    directions = [(1,0),(-1,0),(0,1),(0,-1)]
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            j = nx * 3 + ny
+            s = list(state)
+            s[i], s[j] = s[j], s[i]
+            moves.append("".join(s))
+    return moves
+
+def bfs(start):
+    q = deque([(start, [])])
+    visited = set([start])
+
+    while q:
+        state, path = q.popleft()
+        if state == goal:
+            return path + [state]
+
+        for next_state in get_moves(state):
+            if next_state not in visited:
+                visited.add(next_state)
+                q.append((next_state, path + [state]))
+
+    return None
+start = "123405678"
+
+solution = bfs(start)
+
+for s in solution:
+    print(s[0:3])
+    print(s[3:6])
+    print(s[6:9])
+    print()
